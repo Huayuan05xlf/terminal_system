@@ -1,6 +1,4 @@
 # terminal_system
-A remote terminal management system
-
 
 #########################
 #远程终端管理统
