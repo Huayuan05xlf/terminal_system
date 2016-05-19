@@ -1,16 +1,25 @@
+DIR_BIN = bin
+DIR_OBJ = obj
+DIR_SRC = src
+DIR_INC = include
 CC = gcc
-FLAGS := -Iinclude -pthread -Wall
-targets = bin/server bin/client
-obj_server = obj/menu_server.o obj/online.o obj/user.o obj/my_protocol.o
-obj_client = obj/menu_client.o obj/my_protocol.o
+FLAGS := -I$(DIR_INC) -pthread -Wall
+targets = CheckObjDir CheckBinDir $(DIR_BIN)/server $(DIR_BIN)/client
+obj_server = $(DIR_OBJ)/menu_server.o $(DIR_OBJ)/online.o \
+	$(DIR_OBJ)/user.o $(DIR_OBJ)/my_protocol.o
+obj_client = $(DIR_OBJ)/menu_client.o $(DIR_OBJ)/my_protocol.o
 .PHONY:all
 all:$(targets)
-bin/server:$(obj_server)
+$(DIR_BIN)/server:$(obj_server)
 	$(CC) $^ -o $@ $(FLAGS)
-bin/client:$(obj_client)
+$(DIR_BIN)/client:$(obj_client)
 	$(CC) $^ -o $@ $(FLAGS)
-obj/%.o:src/%.c include/%.h
+$(DIR_OBJ)/%.o:$(DIR_SRC)/%.c $(DIR_INC)/%.h
 	$(CC) -c $< -o $@ $(FLAGS)
+CheckObjDir:
+	@if test ! -d $(DIR_OBJ); then mkdir $(DIR_OBJ); fi
+CheckBinDir:
+	@if test ! -d $(DIR_BIN); then mkdir $(DIR_BIN); fi
 .PHONY:clean
 clean:
-	$(RM) $(targets) obj/*.o
+	$(RM) $(DIR_BIN)/* $(DIR_OBJ)/*.o
